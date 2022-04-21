@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% load template_tags %}
+{% block content %}
+<div class="wrapper">
+    {% include 'menubar.html' %}
+    <div class="content-wrapper p-5">
+        <div class="row">
+            <div class="col-md-12" style="margin: 30px auto;">
+                <div class="card card-primary p-3">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-3">
+                            {{form.Bill_Type|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                            {{form.From|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                            {{form.To|as_crispy_field}}
+                            </div>
+                            <div class="col-md-3">
+                            {{form.Search|as_crispy_field}}
+                            </div>
+                        </div>
+
+                                   
+                        <div class="card-footer bg-transparent">
+                            <button type="submit" class="btn btn-primary float-right">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <table class="table" id="id_datagrid_5">
+            <thead>
+               <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Bill Number</th>
+                    <th>OP NUmber</th>
+                    <th>Patient</th>
+                    <th>Total Cash Collected</th>
+                    <th>IP NUmber</th>
+                    <th>MR NUmber</th>
+                    <th>Sl No</th>
+                    <th>Gross Amount</th>
+                    <th>Advance</th>
+                    <th>Discount</th>
+                    <th>Balance</th>
+                    <th>Entered By</th>
+                    <th>Cancelled By</th>
+                    <th>Payment Type</th>
+              </tr>
+           </thead>
+                <tbody>
+               {% for data in datagrid0 %}<tr>
+                    <td>{{data.billdate}}</td>
+                    <td>{{data.billtime}}</td>
+                    <td>{{data.billnumber}}</td>
+                    <td>{{data.opnumber}}</td>
+                    <td>{{data.patientname}}</td>
+                    <td>{{data.billamount}}</td>
+                    <td>{{data.ipnumber}}</td>
+                    <td>{{data.mrnumber}}</td>
+                    <td>{{data.undefined}}</td>
+                    <td>{{data.roundamount}}</td>
+                    <td>{{data.undefined}}</td>
+                    <td>{{data.billdiscount}}</td>
+                    <td>{{data.billbalance}}</td>
+                    <td>{{data.username}}</td>
+                    <td>{{data.cancelusername}}</td>
+                    <td>{{data.portalpayment}}</td>
+                </tr>{% endfor %}
+            </tbody>
+        </table>
+
+        </div>
+        
+    </div>
+</div>
+
+{% endblock  %}
+{% block extra_script %}
+<script>
+    datagrid5_list  = $('#id_datagrid_5').DataTable({
+    'order':[[ 1, 'asc' ]],
+    'paging'      : true,
+    'lengthChange': false,
+    'searching'   : true,
+    'ordering'    : true,
+    'info'        : true,
+    'autoWidth'   : false,
+    "processing": true,
+    "serverSide": true,
+    "pageLength": 10,
+    "language": {
+        "infoFiltered": ""
+    },
+    "ajax": "{% url 'laboratory:datagrid-5' %}",
+  dom: 'Bfrtip',
+  buttons: [
+      'copy', 'csv', 'excel', 'pdf', 'print'
+  ]
+});
+</script>
+{% endblock  %}
